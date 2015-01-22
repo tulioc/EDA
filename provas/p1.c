@@ -66,7 +66,7 @@ void insereProcesso(head * cabe, int valorId)
 node * buscaID(head * cabe, int alvo)
 {
   node * varredor = cabe->inicio;
-  int achou = 0;
+
   while(varredor->id != alvo && varredor->proximo != NULL)
   {
     varredor = varredor->proximo;
