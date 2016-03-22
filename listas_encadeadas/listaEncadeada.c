@@ -25,6 +25,7 @@ Lista* criaListaNula(void);
 Lista* insereValorLista(Lista* lista, int valorRecebido);
 Lista* removerElemento(Lista* lista, int valorRecebido);
 Lista* buscaElemento(Lista* lista, int valorRecebido);
+Lista* retiraElemento(Lista* lista, int valorRecebido);
 void imprimirLista(Lista* lista);
 
 
@@ -39,6 +40,8 @@ int main (void) {
   lista = insereValorLista(lista,40);
   lista = buscaElemento(lista,40);
   imprimirLista(lista);
+  lista = retiraElemento(lista,40);
+  imprimirLista(lista);
 
   return 0;
 }
@@ -51,7 +54,7 @@ Lista* criaListaNula(void) {
 
 // Insere novo valor em uma dada lista.
 Lista* insereValorLista(Lista* lista, int valorRecebido) {
-  Lista* novo = (Lista*) malloc(sizeof(Lista));
+  Lista* novo = (Lista*) malloc(sizeof(Lista)); // Alocando espaço para o elemento.
   novo->valor = valorRecebido;
   novo->proximo = lista;
   return novo;
@@ -59,7 +62,7 @@ Lista* insereValorLista(Lista* lista, int valorRecebido) {
 
 // Função para buscar um elemento de uma dada lista.
 Lista* buscaElemento(Lista* lista, int valorRecebido) {
-  Lista* varredor;
+  Lista* varredor; // Criando ponteiro para varrer a lista
   for(varredor = lista; varredor!=NULL; varredor = varredor->proximo) {
       if(varredor->valor == valorRecebido) {
         printf("Valor recebido para busca : %d\n", valorRecebido);
@@ -73,7 +76,34 @@ Lista* buscaElemento(Lista* lista, int valorRecebido) {
   }
   return lista;
 }
+// Função que retira um elemento de uma dada lista
+Lista* retiraElemento(Lista* lista, int valorRecebido) {
+  Lista* anterior = NULL; // Ponteiro para elemento anterior
+  Lista* varredor = lista; // Ponteiro para percorrer a lista
 
+  printf("O elemento escolhido para ser removido foi o %d\n", valorRecebido);
+
+  while(varredor != NULL && varredor->valor !=valorRecebido) {
+    anterior = varredor;
+    varredor = varredor->proximo;
+  }
+  // Se o elemento não foi encontrado, retorno a lista original.
+  if (varredor == NULL) {
+    return lista;
+
+  } else if (anterior == NULL) {
+    /*Se o anterior continuar como NULL,
+     significa que o elemento a ser excluído, era o primeiro elemento.*/
+     /*Sendo assim, o ponteiro da lista, passa a apontar para o próximo valor da lista*/
+    lista = varredor->proximo;
+  }
+  else {
+    /* O ponteiro próximo do elemento anterior, receberá o ponteiro próximo do varredor*/
+    anterior->proximo = varredor->proximo;
+  }
+  free(varredor);
+  return lista;
+}
 
 
 
