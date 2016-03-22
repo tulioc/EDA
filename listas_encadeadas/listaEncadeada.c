@@ -24,6 +24,7 @@ struct lista {
 Lista* criaListaNula(void);
 Lista* insereValorLista(Lista* lista, int valorRecebido);
 Lista* removerElemento(Lista* lista, int valorRecebido);
+Lista* buscaElemento(Lista* lista, int valorRecebido);
 void imprimirLista(Lista* lista);
 
 
@@ -36,6 +37,7 @@ int main (void) {
   lista = insereValorLista(lista,20);
   lista = insereValorLista(lista,30);
   lista = insereValorLista(lista,40);
+  lista = buscaElemento(lista,40);
   imprimirLista(lista);
 
   return 0;
@@ -49,14 +51,32 @@ Lista* criaListaNula(void) {
 
 // Insere novo valor em uma dada lista.
 Lista* insereValorLista(Lista* lista, int valorRecebido) {
-
   Lista* novo = (Lista*) malloc(sizeof(Lista));
   novo->valor = valorRecebido;
   novo->proximo = lista;
   return novo;
 }
 
-// Função para remover elemento de uma dada lista.
+// Função para buscar um elemento de uma dada lista.
+Lista* buscaElemento(Lista* lista, int valorRecebido) {
+  Lista* varredor;
+  for(varredor = lista; varredor!=NULL; varredor = varredor->proximo) {
+      if(varredor->valor == valorRecebido) {
+        printf("Valor recebido para busca : %d\n", valorRecebido);
+        printf("Valor encontrado : %d\n", varredor->valor);
+        return varredor;
+      }
+      else {
+        printf("Elemento não foi encontrado na lista");
+        return NULL;
+      }
+  }
+  return lista;
+}
+
+
+
+
 
 void imprimirLista(Lista *lista) {
 
