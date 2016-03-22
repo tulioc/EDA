@@ -27,6 +27,7 @@ Lista* insereValorNaUltimaPos(Lista* lista, int valorRecebido);
 Lista* removerElemento(Lista* lista, int valorRecebido);
 Lista* buscaElemento(Lista* lista, int valorRecebido);
 Lista* retiraElemento(Lista* lista, int valorRecebido);
+Lista* retiraUltimoElemento(Lista* lista);
 void liberaLista(Lista* lista);
 void imprimirLista(Lista* lista);
 
@@ -40,8 +41,9 @@ int main (void) {
   lista = insereValorLista(lista,20);
   lista = insereValorLista(lista,30);
   lista = insereValorLista(lista,40);
-  lista = buscaElemento(lista,40);
-  lista = insereValorNaUltimaPos(lista,50);
+  imprimirLista(lista);
+  lista = retiraUltimoElemento(lista);
+  printf("\n");
   imprimirLista(lista);
 
   return 0;
@@ -132,6 +134,26 @@ Lista* retiraElemento(Lista* lista, int valorRecebido) {
   free(varredor);
   return lista;
 }
+
+Lista* retiraUltimoElemento(Lista* lista) {
+  Lista* varredor1;
+  Lista* varredor2;
+  varredor1 = lista;
+  varredor2 = lista->proximo;
+  while(varredor2->proximo != NULL) {
+    varredor2 = varredor2->proximo;
+    varredor1 = varredor1->proximo;
+  }
+  free(varredor2);
+  varredor1->proximo = NULL;
+  return lista;
+}
+
+
+
+
+
+
 
 void imprimirLista(Lista *lista) {
 
