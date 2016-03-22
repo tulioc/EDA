@@ -60,8 +60,15 @@ Lista* insereValorLista(Lista* lista, int valorRecebido) {
 
 void imprimirLista(Lista *lista) {
 
-  if(lista != NULL) {
-  printf("%d \n", lista->valor);
-  imprimirLista(lista->proximo);
+  /* Função recursiva que imprime Lista.
+    if(lista != NULL) {
+    printf("%d \n", lista->valor);
+    imprimirLista(lista->proximo);
+    }
+    */
+
+  Lista* varredor;
+  for (varredor = lista; varredor!= NULL; varredor = varredor->proximo) {
+    printf("Valor : %d\n", varredor->valor);
   }
 }
