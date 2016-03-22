@@ -26,6 +26,7 @@ Lista* insereValorLista(Lista* lista, int valorRecebido);
 Lista* removerElemento(Lista* lista, int valorRecebido);
 Lista* buscaElemento(Lista* lista, int valorRecebido);
 Lista* retiraElemento(Lista* lista, int valorRecebido);
+void liberaLista(Lista* lista);
 void imprimirLista(Lista* lista);
 
 
@@ -47,9 +48,21 @@ int main (void) {
 }
 
 
+
 // Cria o primeiro elemento da lista, apontando pra null.
 Lista* criaListaNula(void) {
   return NULL;
+}
+
+
+void liberaLista(Lista* lista) {
+  Lista* varredor = lista;
+  while (varredor != NULL) {
+    // Guarda referência p/ próximo elemento.
+    Lista* referenciaProximo = varredor->proximo;
+    free(varredor);
+    varredor = referenciaProximo;
+  }
 }
 
 // Insere novo valor em uma dada lista.
@@ -76,6 +89,7 @@ Lista* buscaElemento(Lista* lista, int valorRecebido) {
   }
   return lista;
 }
+
 // Função que retira um elemento de uma dada lista
 Lista* retiraElemento(Lista* lista, int valorRecebido) {
   Lista* anterior = NULL; // Ponteiro para elemento anterior
