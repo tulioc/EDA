@@ -23,6 +23,7 @@ struct lista {
 
 Lista* criaListaNula(void);
 Lista* insereValorLista(Lista* lista, int valorRecebido);
+Lista* insereValorNaUltimaPos(Lista* lista, int valorRecebido);
 Lista* removerElemento(Lista* lista, int valorRecebido);
 Lista* buscaElemento(Lista* lista, int valorRecebido);
 Lista* retiraElemento(Lista* lista, int valorRecebido);
@@ -40,8 +41,7 @@ int main (void) {
   lista = insereValorLista(lista,30);
   lista = insereValorLista(lista,40);
   lista = buscaElemento(lista,40);
-  imprimirLista(lista);
-  lista = retiraElemento(lista,40);
+  lista = insereValorNaUltimaPos(lista,50);
   imprimirLista(lista);
 
   return 0;
@@ -86,6 +86,23 @@ Lista* buscaElemento(Lista* lista, int valorRecebido) {
   }
   return lista;
 }
+
+Lista* insereValorNaUltimaPos(Lista* lista, int valorRecebido) {
+  Lista* varredor;
+  varredor = lista;
+  while(varredor->proximo != NULL) {
+    varredor = varredor->proximo;
+  }
+  Lista* novoElemento = (Lista*) malloc(sizeof(Lista));
+  novoElemento->valor = valorRecebido;
+  novoElemento->proximo = NULL;
+  varredor->proximo = novoElemento;
+
+  return lista;
+}
+
+
+
 
 // Função que retira um elemento de uma dada lista
 Lista* retiraElemento(Lista* lista, int valorRecebido) {
