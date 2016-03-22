@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
 typedef struct lista Lista;
 
-struct lista {
   int valor;
+struct lista {
   Lista *proximo;
 };
 
@@ -15,9 +13,6 @@ Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido);
 Lista* retiraElemento(Lista* lista, int valorRecebido);
 void imprimirLista(Lista* lista);
 void liberaLista(Lista* lista);
-
-
-
 
 int main (void) {
 
@@ -100,7 +95,6 @@ void liberaLista(Lista* lista) {
     varredor = referenciaProximo;
   }
 }
-
 
 void imprimirLista (Lista* lista) {
   Lista* varredor;

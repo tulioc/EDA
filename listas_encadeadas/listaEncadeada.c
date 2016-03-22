@@ -47,13 +47,10 @@ int main (void) {
   return 0;
 }
 
-
-
 // Cria o primeiro elemento da lista, apontando pra null.
 Lista* criaListaNula(void) {
   return NULL;
 }
-
 
 void liberaLista(Lista* lista) {
   Lista* varredor = lista;
@@ -118,9 +115,6 @@ Lista* retiraElemento(Lista* lista, int valorRecebido) {
   free(varredor);
   return lista;
 }
-
-
-
 
 void imprimirLista(Lista *lista) {
 
