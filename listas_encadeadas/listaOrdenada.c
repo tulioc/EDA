@@ -3,9 +3,10 @@
 
 typedef struct lista Lista;
 
-  int valor;
+
 struct lista {
   Lista *proximo;
+  int valor;
 };
 
 Lista* criaListaNula(void);
