@@ -9,16 +9,20 @@ struct lista {
   int valor;
 };
 
-Lista* criaListaNula(void);
+// Declarando esqueleto das funções.
+
+Lista* criaPrimeiroElemento(int valorRecebido);
 Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido);
 Lista* retiraElemento(Lista* lista, int valorRecebido);
 void imprimirLista(Lista* lista);
 void liberaLista(Lista* lista);
 
+
+// Função Main
 int main (void) {
 
   Lista* lista;
-  lista = criaListaNula();
+  lista = criaPrimeiroElemento(8);
   lista = insereValorListaOrdenada(lista,5);
   lista = insereValorListaOrdenada(lista,2);
   lista = insereValorListaOrdenada(lista,1);
@@ -33,12 +37,17 @@ int main (void) {
 }
 
 
-Lista* criaListaNula(void) {
-  return NULL;
+// Implementando Funções.
+
+Lista* criaPrimeiroElemento(int valorRecebido) {
+  Lista* lista;
+  lista = (Lista*) malloc(sizeof(Lista)); // Alocando espaço na memória para o primeiro elemento.
+  lista->valor = valorRecebido; // O valor do primeiro elemento será o valor recebido como parâmetro na função.
+  lista->proximo = NULL; // O primeiro elemento irá apontar para NULL.
+  return lista; // A função retorna o ponteiro para o primeiro elemento.
 }
 
 Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
-
   Lista* novoElemento;
   Lista* anterior = NULL;
   Lista* varredor = lista;
@@ -47,8 +56,10 @@ Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
     anterior = varredor;
     varredor = varredor->proximo;
   }
+
   novoElemento = (Lista*) malloc(sizeof(Lista));
   novoElemento->valor = valorRecebido;
+
   if (anterior == NULL) {
     novoElemento->proximo = lista;
     lista = novoElemento;
@@ -56,6 +67,7 @@ Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
     novoElemento->proximo = anterior->proximo;
     anterior->proximo = novoElemento;
   }
+
   return lista;
 }
 
