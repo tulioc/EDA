@@ -9,9 +9,12 @@ struct lista {
   struct lista* proximo;
 };
 
+Lista* removerElemento(Lista* lista, int valorRecebido);
+Lista* buscaElemento(Lista* lista, int valorRecebido);
 Lista* criaPrimeiroElemento(int valorRecebido);
 Lista* insereValorLista(Lista* lista, int valorRecebido);
 void imprimirLista(Lista* lista);
+
 
 
 
@@ -21,9 +24,46 @@ int main (void) {
   lista = criaPrimeiroElemento(20);
   lista = insereValorLista(lista,35);
   imprimirLista(lista);
+  lista = removerElemento(lista,20);
+  printf("\n");
+  imprimirLista(lista);
 
   return 0;
 }
+
+Lista* buscaElemento(Lista* lista, int valorRecebido) {
+  Lista* varredor;
+  for (varredor = lista; varredor!=NULL; varredor = varredor->proximo) {
+    if (varredor->valor == valorRecebido) {
+      return varredor;
+    }
+  }
+  return NULL;
+}
+
+
+Lista* removerElemento(Lista* lista, int valorRecebido) {
+
+  Lista* varredor = buscaElemento(lista,valorRecebido);
+
+  if(varredor==NULL) {
+    return lista;
+  }
+
+  if(lista == varredor) {
+    lista = varredor->proximo;
+  } else {
+    varredor->anterior->proximo = varredor->proximo;
+  }
+
+  if(varredor->proximo != NULL) {
+    varredor->proximo->anterior = varredor->anterior;
+  }
+
+  free(varredor);
+  return lista;
+}
+
 
 Lista* insereValorLista(Lista* lista, int valorRecebido) {
   Lista* novoElemento;
