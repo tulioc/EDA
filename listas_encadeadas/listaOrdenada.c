@@ -30,8 +30,6 @@ int main (void) {
   lista = insereValorListaOrdenada(lista,20);
   lista = insereValorListaOrdenada(lista,12);
   imprimirLista(lista);
-  lista = retiraElemento(lista,4);
-  imprimirLista(lista);
   liberaLista(lista);
   return 0;
 }
@@ -48,7 +46,7 @@ Lista* criaPrimeiroElemento(int valorRecebido) {
 }
 
 Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
-  Lista* novoElemento;
+
   Lista* anterior = NULL;
   Lista* varredor = lista;
 
@@ -57,16 +55,18 @@ Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
     varredor = varredor->proximo;
   }
 
+  Lista* novoElemento;
   novoElemento = (Lista*) malloc(sizeof(Lista));
   novoElemento->valor = valorRecebido;
 
   if (anterior == NULL) {
     novoElemento->proximo = lista;
     lista = novoElemento;
-  } else {
+  } else  {
     novoElemento->proximo = anterior->proximo;
     anterior->proximo = novoElemento;
   }
+
 
   return lista;
 }

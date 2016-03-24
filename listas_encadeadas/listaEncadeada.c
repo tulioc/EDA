@@ -125,7 +125,10 @@ Lista* retiraElemento(Lista* lista, int valorRecebido) {
     /*Se o anterior continuar como NULL,
      significa que o elemento a ser excluído, era o primeiro elemento.*/
      /*Sendo assim, o ponteiro da lista, passa a apontar para o próximo valor da lista*/
+     Lista* aux;
+     aux = lista;
     lista = varredor->proximo;
+    free(aux);
   }
   else {
     /* O ponteiro próximo do elemento anterior, receberá o ponteiro próximo do varredor*/
