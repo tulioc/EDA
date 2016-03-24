@@ -23,7 +23,6 @@ lista = insereElementoLista(lista,2);
 lista = insereElementoLista(lista,56);
 lista = insereElementoLista(lista,1);
 imprimirLista(lista);
-printf("Numero de elementos : %d", qntElementos(lista));
 lista = booblesort(lista, qntElementos(lista));
 printf("\n");
 imprimirLista(lista);
