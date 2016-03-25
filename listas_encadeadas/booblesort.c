@@ -19,7 +19,7 @@ int main (void) {
 Lista* lista;
 lista = criaLista(12);
 int contador = 0;
- for(contador = 0; contador <= 1000000; contador++) {
+ for(contador = 0; contador <= 50; contador++) {
 
    lista = insereElementoLista(lista, contador);
 
