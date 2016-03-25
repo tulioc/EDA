@@ -152,12 +152,6 @@ Lista* retiraUltimoElemento(Lista* lista) {
   return lista;
 }
 
-
-
-
-
-
-
 void imprimirLista(Lista *lista) {
 
   /* Função recursiva que imprime Lista.

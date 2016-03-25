@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct lista Lista;
 
@@ -17,11 +18,13 @@ void imprimirLista(Lista* lista);
 int main (void) {
 Lista* lista;
 lista = criaLista(12);
-lista = insereElementoLista(lista,15);
-lista = insereElementoLista(lista,8);
-lista = insereElementoLista(lista,2);
-lista = insereElementoLista(lista,56);
-lista = insereElementoLista(lista,1);
+int contador = 0;
+ for(contador = 0; contador <= 1000000; contador++) {
+
+   lista = insereElementoLista(lista, contador);
+
+ }
+
 imprimirLista(lista);
 lista = booblesort(lista, qntElementos(lista));
 printf("\n");
