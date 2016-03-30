@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 typedef struct lista Lista;
-
+typedef struct pilha Pilha;
 
 struct lista {
-  Lista *proximo;
+  struct lista *proximo;
   float valor;
 };
 
@@ -47,7 +47,7 @@ float popPilha(Pilha* pilha) {
   aux = pilha->topo;
   valor = aux->valor;
   pilha->topo = aux->proximo;
-  free(t);
+  free(aux);
   return valor;
 
 }
