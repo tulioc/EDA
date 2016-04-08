@@ -1,128 +1,132 @@
-/*
- - Inserção é feita sempre ao final da lista, após o último processo pendente.
- - A remoção é feita através da troca dos identificadores do processo a ser removido com o processo que ocupa a última posição válida da lista encadeada. Após a permuta,
- o último elemento é removido.
- - A lista encadeada do sistema tem uma capacidade máxima de N processos pendentes. Caso uma inserção tente ser realizada com a lista completamente cheia,
- o processo a ser inserido deve ser descartado.
- - também deverá ser ignorada uma tentativa de remoção quando a lista de processos
- pendentes estiver vazia ou o identificador do processo fornecido não estiver presente na lista.
-
-
-Entrada : A entrada consiste em uma única linha com capacidade N da lista, o número M de processos a serem carregados
-na inicialização do sistema, seguidos pelos respectivos identificadores,
-o número R de requisições de inserção e remoção e das descrições das mensagens de inserção e remoção
-Todos os valores são separados por espaços em branco N.
-
-Saída : A saída do programa deverá contar a mensagem : V = [id1,id2,...] onde id é o idenficador do i-ésimo processo
-na lista encadeada. Cada identificador deve ser seguido de uma vírgula e um espaço em branco, exceto o último, e todos eles devem estar entre colchetes.
-
-Entradas                    Saídas
-10 2 1 2 1 3 n              V = [1, 2, 3]
-10 3 3 1 2 3 3 t 4 n 5 n    V = [2, 1, 4, 5]
-
-*/
+#include <stdlib.h>
 #include <stdio.h>
-#include  <stdlib.h>
 
-typedef struct lista Lista;
-
-
-struct lista {
+typedef struct no
+{
   int id;
-  Lista* proximo;
+  struct no * anterior;
+  struct no * proximo;
+} node;
 
-};
+typedef struct cabecalho
+{
+  int quantidade_nos;
+  int qtd_max;
+  node * inicio;
+  node * fim;
+} head;
 
-Lista* inserirElemento (Lista* lista, int id, int numMax);
-Lista* criarLista(int id);
-Lista* removerElemento(Lista* lista, int id);
-int qntsElementos (Lista* lista);
+head * criaHead(int max)
+{
+  head * novoHead = (head*)malloc(sizeof(head));
 
+  novoHead->quantidade_nos = 0;
+  novoHead->qtd_max = max;
+  novoHead->inicio = NULL;
+  novoHead->fim = NULL;
 
-
-int main (void) {
-
-
-return 0;
+  return novoHead;
 }
 
-Lista* removerElemento(Lista* lista, int id) {
-  Lista* elementoAlvo;
-  Lista* ultimoElemento;
-  Lista* penultimoElemento;
+node * criaNode(int valorId)
+{
+  node * novoNode = (node*)malloc(sizeof(node));
 
-  elementoAlvo = lista;
-  penultimoElemento = lista;
-  ultimoElemento = lista->proximo;
+  novoNode->id = valorId;
+  novoNode->proximo = NULL;
+  novoNode->anterior = NULL;
 
-  while(ultimoElemento->proximo != NULL) {
-    ultimoElemento = ultimoElemento->proximo;
-    penultimoElemento = penultimoElemento->proximo;
+  return novoNode;
+}
+
+void insereProcesso(head * cabe, int valorId)
+{
+  node * novoNode = criaNode(valorId);
+
+  if(cabe->quantidade_nos == 0)
+  {
+    cabe->inicio = novoNode;
+    cabe->fim = novoNode;
+
+    cabe->quantidade_nos++;
+  } else if(cabe->quantidade_nos > 0 && cabe->quantidade_nos <
+              cabe->qtd_max)
+  {
+    novoNode->anterior = cabe->fim;
+    cabe->fim->proximo = novoNode;
+
+    cabe->fim = novoNode;
+    cabe->quantidade_nos++;
+  } else
+  {
+    //NADA - NAO MEXA - VSF
   }
+}
 
-  while(elementoAlvo->id != id) {
-    elementoAlvo = elementoAlvo->proximo;
+node * buscaID(head * cabe, int alvo)
+{
+  node * varredor = cabe->inicio;
+  int achou = 0;
+  while(varredor->id != alvo && varredor->proximo != NULL)
+  {
+    varredor = varredor->proximo;
   }
-  penultimoElemento->proximo = NULL;
-  int valorUltimoElemento;
-  valorUltimoElemento = ultimoElemento->id;
-  ultimoElemento->id = elementoAlvo->id;
-  elementoAlvo->id = valorUltimoElemento;
-  free(ultimoElemento);
-  return lista;
-
-}
-
-
-
-int qntsElementos (Lista* lista) {
-
-  int contador = 0;
-  Lista* aux;
-  aux = lista;
-  while(aux != NULL) {
-    aux = aux->proximo;
-    contador = contador + 1;
+  if(varredor->id == alvo)
+  {
+    return varredor;
+  } else
+  {
+    return NULL;
   }
-  return contador;
 }
 
 
+void removeId(head * cabe, int id)
+{
+  node * noAchado = buscaID(cabe, id);
 
 
-Lista* criarLista(int id) {
-  Lista * primeiroElemento;
-  primeiroElemento->id = id;
-  primeiroElemento->proximo = NULL;
-  return primeiroElemento;
-}
+  if(noAchado != NULL)
+  {
+    if(noAchado == cabe->fim)
+    {
+      cabe->fim = noAchado->anterior;
+      cabe->fim->proximo = NULL;
+      cabe->quantidade_nos--;
 
+      free(noAchado);
+    } else
+    {
+      int salvaID = cabe->fim->id;
 
-Lista* inserirElemento (Lista* lista, int id, int numMax) {
+      cabe->fim->id = noAchado->id;
+      noAchado->id = salvaID;
 
-    if (lista != NULL) {
-
-    if (qntsElementos(lista) <= (numMax -1) ) {
-      Lista* anterior;
-      Lista* ultimo;
-      anterior = lista;
-      ultimo = lista->proximo;
-        while (ultimo->proximo != NULL) {
-          anterior = anterior->proximo;
-          ultimo = ultimo->proximo;
-        }
-        Lista* novoElemento;
-        novoElemento = (Lista*)malloc(sizeof(Lista));
-        novoElemento->proximo = ultimo->proximo;
-        anterior->proximo = novoElemento;
-        novoElemento->id = id;
-        free(ultimo);
-        return lista;
-      } else {
-        printf("Lista cheia\n");
-        }
-
-    } else {
-      printf("Tchau\n");
+      cabe->fim = noAchado->anterior;
+      cabe->fim->proximo = NULL;
+      cabe->quantidade_nos--;
     }
+  } else
+  {
+    return;
+  }
+}
+/*
+void imprimeLista(head * lista)
+{
+  int contador = 0;
+  node * auxiliar = lista->inicio;
+
+  for(; contador < lista->quantidade_nos; contador++)
+  {
+    printf("%d ");
+  }
+}
+*/
+int main(void)
+{
+
+
+
+  return 0;
 }
