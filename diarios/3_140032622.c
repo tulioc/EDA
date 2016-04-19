@@ -4,6 +4,15 @@
 typedef struct node Node;
 typedef struct gestor Gestor;
 
+struct aluno {
+  char *matricula;
+  char *nome;
+  int p1,p2,p3;
+  float media;
+  char result[3];
+};
+
+
 struct node {
   int valor;
   Node* proximo;
