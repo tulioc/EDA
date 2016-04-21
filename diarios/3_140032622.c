@@ -1,36 +1,77 @@
+/*
+fwcruz@unb.br
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct node Node;
 typedef struct gestor Gestor;
+typedef struct aluno Aluno;
 
 struct aluno {
-  char *matricula;
-  char *nome;
+  char nome[30];
+  int matricula;
   int p1,p2,p3;
-  float media;
-  char result[3];
+  int media;
 };
 
 
 struct node {
   int valor;
+  Aluno* aluno;
   Node* proximo;
   Node* anterior;
 };
 
 struct gestor {
-
   int quantidade_nos;
   int quantidade_max;
-
   Node* inicio;
   Node* fim;
 };
 
 
+Gestor* cria_gestor(int quantidade_max);
+Node* cria_node(int valor);
+/*Node* busca_no(Gestor* gestor, int alvo);*/
+void calcula_matricula(Aluno* aluno,int valor);
+void adiciona_elemento(Gestor* gestor, int valor);
+/*void remove_no(Gestor* gestor, int alvo);*/
+void leia_string(char* palavra);
+void imprime_lista(Gestor* gestor, Node* varredor);
+
+
+int main (void) {
+  Gestor* gestor;
+  Node* varredor;
+  char enter;
+  int num_alunos = 0;
+  int contador = 0;
+  printf("Digite o número de alunos da turma : \n");
+  scanf("%d",&num_alunos);
+  scanf("%c",&enter);
+  gestor = cria_gestor(num_alunos);
+  for (; contador < num_alunos; contador++) {
+    adiciona_elemento(gestor,contador);
+  }
+
+  varredor = gestor->fim;
+  printf("\n");
+  printf("MATRÍCULA           ALUNO                    MÉDIA");
+  printf("\n------------------------------------------------------ \n");
+  imprime_lista(gestor,varredor);
+
+  return 0;
+}
+
+
+
 Gestor* cria_gestor(int quantidade_max) {
   Gestor* novo_gestor = (Gestor*)malloc(sizeof(Gestor));
+
   novo_gestor->quantidade_max = quantidade_max;
   novo_gestor->quantidade_nos = 0;
   novo_gestor->inicio = NULL;
@@ -39,10 +80,20 @@ Gestor* cria_gestor(int quantidade_max) {
 }
 
 Node* cria_node(int valor) {
+  char enter;
   Node* novo_node = (Node*)malloc(sizeof(Node));
+  Aluno* aluno = (Aluno*)malloc(sizeof(Aluno));
   novo_node->proximo = NULL;
   novo_node->anterior = NULL;
   novo_node->valor = valor;
+
+  leia_string(aluno->nome);
+  printf("Digite a nota das provas : \n");
+  scanf("%d %d %d", &aluno->p1, &aluno->p2, &aluno->p3);
+  scanf("%c",&enter);
+  aluno->media = (aluno->p1 + aluno->p2 + aluno->p3)/3;
+  calcula_matricula(aluno,novo_node->valor);
+  novo_node->aluno = aluno;
   return novo_node;
 }
 
@@ -59,75 +110,59 @@ void adiciona_elemento(Gestor* gestor, int valor) {
     novo_elemento->anterior = gestor->fim;
     gestor->fim->proximo = gestor->inicio;
     gestor->quantidade_nos++;
-
   } else {
-    //NADA
+
   }
 }
 
-Node* busca_no (Gestor* gestor, int alvo) {
-  Node* no_alvo = gestor->inicio;
-
-  while(no_alvo->valor != alvo) {
-    no_alvo = no_alvo->proximo;
+void leia_string (char* palavra) {
+  int i = 0;
+  int j = 0;
+  printf("Digite o nome do aluno : \n");
+  while((palavra[i] = getchar()) != '\n') {
+    i++;
   }
+  while(palavra[j] != '\n') {
+    j++;
+  }
+  palavra[j] = '\0';
+}
 
-  if(no_alvo->valor == alvo) {
-    return no_alvo;
+void calcula_matricula (Aluno* aluno,int valor) {
+  int primeiro = 0;
+  int segundo = 1;
+  int proximo = 0;
+  int contador = 0;
+
+  if(valor == 1 ) {
+    aluno->matricula = 1;
   } else {
-    return NULL;
+    for (; contador < valor; contador++) {
+        if (contador <= 1) {
+          proximo = contador;
+        }
+        else {
+          proximo = primeiro + segundo;
+          primeiro = segundo;
+          segundo = proximo;
+        }
+    }
+    aluno->matricula = (proximo + primeiro);
   }
 }
 
-void remove_no (Gestor* gestor, int alvo) {
-  Node* no_alvo = busca_no(gestor, alvo);
-  Node* auxA = no_alvo->anterior;
-  Node* auxP = no_alvo->proximo;
-  if (no_alvo == gestor->inicio) {
-    gestor->fim->proximo = gestor->inicio->proximo;
-    gestor->inicio = gestor->inicio->proximo;
-    gestor->inicio->anterior = gestor->fim;
-    free(no_alvo);
-    gestor->quantidade_nos--;
-  } else if (no_alvo == gestor->fim) {
-    gestor->fim = gestor->fim->anterior;
-    gestor->fim->proximo = gestor->inicio;
-    gestor->inicio->anterior = gestor->fim;
-    free(no_alvo);
-    gestor->quantidade_nos--;
-  } else {
-    auxA->proximo = auxP;
-    auxP->anterior = auxA;
-    free(no_alvo);
-    gestor->quantidade_nos;
-  }
-}
+void imprime_lista (Gestor* gestor, Node* varredor) {
 
-
-void imprime_lista (Gestor* gestor) {
-  Node* aux = gestor->inicio;
-  Node* auxU = gestor->fim;
-  while (aux != auxU) {
-    printf("%d\n",aux->valor);
-    aux = aux->proximo;
-  }
-  printf("%d\n",aux->valor);
-}
-
-int main (void) {
-
-Gestor* gestor;
-gestor = cria_gestor(10);
-int contador = 0;
-for (contador = 0; contador < 10; contador++) {
-  adiciona_elemento(gestor,contador);
-}
-
-imprime_lista(gestor);
-remove_no(gestor,5);
-printf("\n");
-imprime_lista(gestor);
-
-
-  return 0;
+    if(gestor->quantidade_nos <= 1) {
+      printf("    %d \t \t    %s \t\t      %d ", varredor->aluno->matricula, varredor->aluno->nome, varredor->aluno->media);
+      printf("\n------------------------------------------------------ \n");
+    }
+    else {
+      printf("    %d \t \t    %s \t\t      %d ", varredor->aluno->matricula, varredor->aluno->nome, varredor->aluno->media);
+      printf("\n------------------------------------------------------ \n");
+      varredor = varredor->anterior;
+      if (varredor != gestor->fim) {
+          imprime_lista(gestor,varredor);
+      }
+    }
 }
