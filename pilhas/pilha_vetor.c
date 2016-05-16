@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 10
+#define N 21
 
 typedef struct pilha Pilha;
 
@@ -53,18 +53,21 @@ void pilha_imprime (Pilha* pilha) {
   }
 }
 
+
+
 int main (void) {
+
   Pilha* teste;
   teste = pilha_cria();
-  pilha_imprime(teste);
+  pilha_push(teste, 1.0);
+  pilha_push(teste, 2.0);
+  pilha_push(teste, 3.0);
+  pilha_push(teste, 4.0);
   pilha_push(teste, 5.0);
-  pilha_imprime(teste);
-  pilha_push(teste, 7.0);
-  pilha_imprime(teste);
-  pilha_push(teste, 6.0);
   pilha_imprime(teste);
   pilha_pop(teste);
   pilha_imprime(teste);
+
 
 
 
