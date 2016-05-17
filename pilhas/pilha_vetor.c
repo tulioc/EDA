@@ -1,75 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define N 21
+#define N 10
 
 typedef struct pilha Pilha;
 
+
 struct pilha {
-  int numero_elementos; // topo da pilha
-  float vet[N];
+  int topo;
+  float vetor[N];
 };
 
 
-Pilha* pilha_cria(void) {
+Pilha* cria_pilha(void) {
   Pilha* nova_pilha = (Pilha*)malloc(sizeof(Pilha));
-  nova_pilha->numero_elementos = 0;
+  nova_pilha->topo = 0;
   return nova_pilha;
 }
 
-void pilha_push(Pilha* pilha, float valor) {
-  if (pilha->numero_elementos == N) {
-    printf("Capacidade da pilha estourou. \n");
-    exit(1);
-  } else {
-    pilha->vet[pilha->numero_elementos] = valor;
-    pilha->numero_elementos++;
-  }
+void pilha_add(Pilha* pilha, float valor) {
+  pilha->vetor[pilha->topo] = valor;
+  pilha->topo++;
 }
 
-float pilha_pop(Pilha* pilha) {
+float pilha_delete(Pilha* pilha) {
   float v;
-
-  if (pilha->numero_elementos == 0) {
+  if (pilha->topo == 0) {
     printf("Pilha vazia\n");
-    exit(1);
   } else {
-    v = pilha->vet[pilha->numero_elementos-1];
-    pilha->numero_elementos--;
+    v = pilha->vetor[pilha->topo - 1];
+    pilha->topo--;
     return v;
   }
 }
 
-
-void pilha_imprime (Pilha* pilha) {
-  int varredor = 0;
-  if (pilha->numero_elementos == 0) {
-    printf("Pilha vazia\n");
-  } else {
-    for (; varredor < pilha->numero_elementos; varredor++) {
-      printf("%f\n",pilha->vet[varredor]);
-
-    }
-    printf("\n Fim pilha \n");
+void imprime_pilha(Pilha* pilha) {
+  int contador =0;
+  for (; contador < pilha->topo; contador++) {
+    printf("%.2f\n",pilha->vetor[contador] );
   }
 }
 
-
-
 int main (void) {
 
-  Pilha* teste;
-  teste = pilha_cria();
-  pilha_push(teste, 1.0);
-  pilha_push(teste, 2.0);
-  pilha_push(teste, 3.0);
-  pilha_push(teste, 4.0);
-  pilha_push(teste, 5.0);
-  pilha_imprime(teste);
-  pilha_pop(teste);
-  pilha_imprime(teste);
+    Pilha* teste;
+    teste = cria_pilha();
+    pilha_add(teste,1);
+    pilha_add(teste,2);
+    pilha_add(teste,3);
+    imprime_pilha(teste);
+    pilha_delete(teste);
+    imprime_pilha(teste);
 
-
-
-
-  return 0;
 }
