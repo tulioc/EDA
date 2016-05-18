@@ -1,73 +1,64 @@
-#include  <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #define N 10
+
+
 typedef struct fila Fila;
 
+
 struct fila {
-  int numero_elementos; // NUMERO DE ELEMENTOS
-  int pos_ini; // POSIÇÃO DO PROXIMO A SER REMOVIDO
-  float vet[N];
+  int pos_ini;
+  int n_elementos;
+  float vetor[N];
 };
 
-Fila* fila_cria(void) {
+
+Fila* cria_fila(void) {
   Fila* nova_fila = (Fila*)malloc(sizeof(Fila));
-  nova_fila->numero_elementos = 0;
   nova_fila->pos_ini = 0;
+  nova_fila->n_elementos = 0;
   return nova_fila;
 }
 
-void fila_insere(Fila* fila, float valor) {
+void fila_add(Fila* fila, float valor) {
   int fim;
-  if (fila->numero_elementos == N) {
-    printf("Fila cheia \n");
-    exit(1);
-  }
-  fim = (fila->pos_ini + fila->numero_elementos) % N;
-  fila->vet[fim] = valor;
-  fila->numero_elementos++;
+  fim = (fila->pos_ini + fila->n_elementos) % N;
+  fila->vetor[fim] = valor;
+  fila->n_elementos++;
 }
 
-float fila_retira (Fila* fila) {
-  float valor;
-  if (fila->numero_elementos == 0) {
-    printf("Fila vazia.\n");
-    exit(1);
-  }
-  valor = fila->vet[fila->pos_ini];
-
-  fila->pos_ini = (fila->pos_ini + 1) % N;
-  fila->numero_elementos--;
-  return valor;
-}
-
-void imprime_fila (Fila* fila) {
-  int varredor = fila->pos_ini;
-  int fim;
-  fim = fim = (fila->pos_ini + fila->numero_elementos) % N;
-  if (fila->numero_elementos == 0) {
-    printf("Fila Vazia\n");
+float fila_delete(Fila* fila) {
+  float v;
+  if (fila->n_elementos == 0) {
+    printf("Fila vazia\n");
   } else {
-    printf("\n ===== INICIO FILA ===== \n");
-    for (; varredor < fim; varredor++) {
-      printf("%.2f\n", fila->vet[varredor]);
-    }
-    printf("\n ===== FIM FILA ===== \n");
+    v = fila->vetor[fila->pos_ini];
+    fila->pos_ini = (fila->pos_ini + 1) % N;
+    fila->n_elementos--;
+    return v;
+  }
+}
+
+void imprime_fila(Fila* fila) {
+  int contador, fim;
+  fim = (fila->pos_ini + fila->n_elementos) % N;
+  contador = fila->pos_ini;
+  for(; contador < fim; contador++) {
+    printf("%.2f\n", fila->vetor[contador]);
   }
 }
 
 
 int main (void) {
-  Fila* teste;
-  teste = fila_cria();
-  imprime_fila(teste);
-  fila_insere(teste,1);
-  fila_insere(teste,2);
-  fila_insere(teste,3);
-  fila_insere(teste,4);
-  fila_insere(teste,5);
-  imprime_fila(teste);
-  fila_retira(teste);
-  imprime_fila(teste);
 
+  Fila* teste;
+  teste = cria_fila();
+  fila_add(teste, 1);
+  fila_add(teste, 2);
+  fila_add(teste, 3);
+  fila_add(teste, 4);
+  imprime_fila(teste);
+  fila_delete(teste);
+  imprime_fila(teste);
   return 0;
 }
