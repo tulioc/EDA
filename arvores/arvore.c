@@ -1,19 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#define ELEMENTOS 10
 typedef struct arvore Arvore;
-
-
-
-
-
-
+typedef struct fila Fila;
+typedef struct node Node;
 
 struct arvore {
   char info;
   struct arvore* esquerda;
   struct arvore* direita;
 };
+
+struct fila {
+  Node* inicio;
+  Node* atual;
+  Node* fim;
+  int n_elementos;
+};
+
+struct node {
+  char valor;
+  Node* proximo;
+};
+
+Fila* cria_fila(void) {
+  Fila* nova_fila = (Fila*)malloc(sizeof(Fila));
+  nova_fila->inicio = NULL;
+  nova_fila->fim = NULL;
+  nova_fila->n_elementos = 0;
+  return nova_fila;
+}
+
+void fila_add(Fila* fila, char valor) {
+  Node* novo_elemento = (Node*)malloc(sizeof(Node));
+  novo_elemento->valor = valor;
+  novo_elemento->proximo = NULL;
+  if (fila->n_elementos == 0) {
+    fila->inicio = novo_elemento;
+    fila->fim = novo_elemento->proximo;
+    fila->atual = novo_elemento;
+    fila->n_elementos++;
+  } else {
+    fila->atual->proximo = novo_elemento;
+    fila->atual = novo_elemento;
+    fila->fim = novo_elemento;
+    fila->fim = fila->fim->proximo;
+    fila->n_elementos++;
+  }
+}
 
 Arvore* arvore_cria_vazia(void) {
   return NULL;
@@ -68,6 +102,18 @@ void imprime_arvore_posfixa(Arvore* alvo) {
     imprime_arvore_posfixa(alvo->esquerda);
     printf("%c\n", alvo->info);
   }
+}
+
+void imprime_arvore_largura(Arvore* alvo) {
+  Fila* fila;
+  fila = cria_fila(void);
+  fila_add(fila,alvo->info);
+  Node* aux = fila->inicio;
+  fila_add(fila, alvo->esquerda->info);
+
+
+
+
 }
 
 
