@@ -1,168 +1,94 @@
-/*
-Uma lista encadeada, nada mais é, que uma struct com pelo menos duas estruturas:
-Uma dada informação e um ponteiro que aponta para o próximo elemento da lista. Cada posição de uma lista encadeada é chamada de nó.
-
-Funções de remover o elemento e reorganizar...
-* Atualiza o valor da lista, se o elemento removido for o primeiro
-* Caso contrário, apenas remove o elemento da lista.
-
-*/
-
 #include <stdio.h>
-#include  <stdlib.h>
+#include <stdlib.h>
 
 typedef struct lista Lista;
+typedef struct no No;
 
-// Cria a estrutura da lista
-struct lista {
-  int valor;
-  Lista *proximo;
+struct no {
+  int info;
+  No* proximo;
 };
 
-// Declarando o 'esqueleto das funções'
+struct lista {
+  int quantidade_elementos;
+  No* inicio;
+  No* fim;
+};
 
-Lista* criaListaNula(void);
-Lista* insereValorLista(Lista* lista, int valorRecebido);
-Lista* insereValorNaUltimaPos(Lista* lista, int valorRecebido);
-Lista* removerElemento(Lista* lista, int valorRecebido);
-Lista* buscaElemento(Lista* lista, int valorRecebido);
-Lista* retiraElemento(Lista* lista, int valorRecebido);
-Lista* retiraUltimoElemento(Lista* lista);
-void liberaLista(Lista* lista);
-void imprimirLista(Lista* lista);
+Lista* cria_lista(void);
+No* cria_no(int info);
+No* busca_elemento(Lista* lista, int info);
+void adiciona_elemento_fim(Lista* lista, int info);
+void deleta_elemento_fim(Lista* lista, int info);
+void imprime_lista(Lista* lista);
 
 
 int main (void) {
-
-  Lista* lista;
-
-  lista = criaListaNula();
-  lista = insereValorLista(lista,10);
-  lista = insereValorLista(lista,20);
-  lista = insereValorLista(lista,30);
-  lista = insereValorLista(lista,40);
-  imprimirLista(lista);
-  lista = retiraUltimoElemento(lista);
-  printf("\n");
-  imprimirLista(lista);
-
+  Lista* lista = cria_lista();
+  adiciona_elemento_fim(lista,10);
+  adiciona_elemento_fim(lista,11);
+  adiciona_elemento_fim(lista,12);
+  deleta_elemento_fim(lista,12);
+  imprime_lista(lista);
   return 0;
 }
 
-// Cria o primeiro elemento da lista, apontando pra null.
-Lista* criaListaNula(void) {
-  return NULL;
+Lista* cria_lista(void) {
+  Lista* nova_lista = (Lista*)malloc(sizeof(Lista));
+  nova_lista->quantidade_elementos = 0;
+  nova_lista->inicio = NULL;
+  nova_lista->fim = NULL;
+  return nova_lista;
 }
 
-void liberaLista(Lista* lista) {
-  Lista* varredor = lista;
-  while (varredor != NULL) {
-    // Guarda referência p/ próximo elemento.
-    Lista* referenciaProximo = varredor->proximo;
-    free(varredor);
-    varredor = referenciaProximo;
+No* cria_no(int info) {
+  No* novo_no = (No*)malloc(sizeof(No));
+  novo_no->info = info;
+  novo_no->proximo = NULL;
+  return novo_no;
+}
+
+No* busca_elemento(Lista* lista, int info) {
+  No* alvo;
+  alvo = lista->inicio;
+  while(alvo->info != info) {
+    alvo = alvo->proximo;
+  }
+  return alvo;
+}
+
+void adiciona_elemento_fim(Lista* lista, int info) {
+  No* novo_elemento = cria_no(info);
+  if(lista->quantidade_elementos == 0) {
+    lista->inicio = novo_elemento;
+    lista->fim = novo_elemento;
+    lista->quantidade_elementos++;
+  } else {
+    lista->fim->proximo = novo_elemento;
+    lista->fim = novo_elemento;
+    lista->quantidade_elementos++;
   }
 }
 
-// Insere novo valor em uma dada lista.
-Lista* insereValorLista(Lista* lista, int valorRecebido) {
-  Lista* novo = (Lista*) malloc(sizeof(Lista)); // Alocando espaço para o elemento.
-  novo->valor = valorRecebido;
-  novo->proximo = lista;
-  return novo;
-}
-
-// Função para buscar um elemento de uma dada lista.
-Lista* buscaElemento(Lista* lista, int valorRecebido) {
-  Lista* varredor; // Criando ponteiro para varrer a lista
-  for(varredor = lista; varredor!=NULL; varredor = varredor->proximo) {
-      if(varredor->valor == valorRecebido) {
-        printf("Valor recebido para busca : %d\n", valorRecebido);
-        printf("Valor encontrado : %d\n", varredor->valor);
-        return varredor;
-      }
-      else {
-        printf("Elemento não foi encontrado na lista");
-        return NULL;
-      }
-  }
-  return lista;
-}
-
-Lista* insereValorNaUltimaPos(Lista* lista, int valorRecebido) {
-  Lista* varredor;
-  varredor = lista;
-  while(varredor->proximo != NULL) {
-    varredor = varredor->proximo;
-  }
-  Lista* novoElemento = (Lista*) malloc(sizeof(Lista));
-  novoElemento->valor = valorRecebido;
-  novoElemento->proximo = NULL;
-  varredor->proximo = novoElemento;
-
-  return lista;
-}
-
-
-
-
-// Função que retira um elemento de uma dada lista
-Lista* retiraElemento(Lista* lista, int valorRecebido) {
-  Lista* anterior = NULL; // Ponteiro para elemento anterior
-  Lista* varredor = lista; // Ponteiro para percorrer a lista
-
-  printf("O elemento escolhido para ser removido foi o %d\n", valorRecebido);
-
-  while(varredor != NULL && varredor->valor !=valorRecebido) {
-    anterior = varredor;
-    varredor = varredor->proximo;
-  }
-  // Se o elemento não foi encontrado, retorno a lista original.
-  if (varredor == NULL) {
-    return lista;
-
-  } else if (anterior == NULL) {
-    /*Se o anterior continuar como NULL,
-     significa que o elemento a ser excluído, era o primeiro elemento.*/
-     /*Sendo assim, o ponteiro da lista, passa a apontar para o próximo valor da lista*/
-     Lista* aux;
-     aux = lista;
-    lista = varredor->proximo;
-    free(aux);
-  }
-  else {
-    /* O ponteiro próximo do elemento anterior, receberá o ponteiro próximo do varredor*/
-    anterior->proximo = varredor->proximo;
-  }
-  free(varredor);
-  return lista;
-}
-
-Lista* retiraUltimoElemento(Lista* lista) {
-  Lista* varredor1;
-  Lista* varredor2;
-  varredor1 = lista;
-  varredor2 = lista->proximo;
-  while(varredor2->proximo != NULL) {
-    varredor2 = varredor2->proximo;
-    varredor1 = varredor1->proximo;
-  }
-  free(varredor2);
-  varredor1->proximo = NULL;
-  return lista;
-}
-
-void imprimirLista(Lista *lista) {
-
-  /* Função recursiva que imprime Lista.
-    if(lista != NULL) {
-    printf("%d \n", lista->valor);
-    imprimirLista(lista->proximo);
+void deleta_elemento_fim(Lista* lista, int info) {
+  if(lista->quantidade_elementos > 0) {
+    No* aux = lista->inicio;
+    while(aux->proximo != lista->fim) {
+      aux = aux->proximo;
     }
-    */
+    aux->proximo = NULL;
+    free(lista->fim);
+    lista->fim = aux;
+  } else {
+    printf("Lista sem elemento\n");
+  }
+}
 
-  Lista* varredor;
-  for (varredor = lista; varredor!= NULL; varredor = varredor->proximo) {
-    printf("Valor : %d\n", varredor->valor);
+void imprime_lista(Lista* lista) {
+  No* aux;
+  aux = lista->inicio;
+  while(aux != NULL) {
+    printf("%d\n",aux->info);
+    aux = aux->proximo;
   }
 }
