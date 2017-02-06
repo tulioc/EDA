@@ -2,116 +2,101 @@
 #include <stdlib.h>
 
 typedef struct lista Lista;
+typedef struct no No;
 
-
-struct lista {
-  Lista *proximo;
-  int valor;
+struct no {
+  int info;
+  No* proximo;
 };
 
-// Declarando esqueleto das funções.
+struct lista {
+  int quantidade_elementos;
+  No* inicio;
+  No* fim;
+};
 
-Lista* criaPrimeiroElemento(int valorRecebido);
-Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido);
-Lista* retiraElemento(Lista* lista, int valorRecebido);
-void imprimirLista(Lista* lista);
-void liberaLista(Lista* lista);
+Lista* cria_lista(void);
+No* cria_no(int info);
+No* busca_elemento(Lista* lista, int info);
+void adiciona_elemento(Lista* lista, int info);
+void deleta_elemento(Lista* lista, int info);
+void imprime_lista(Lista* lista);
+void libera_lista(Lista* lista);
 
-
-// Função Main
 int main (void) {
-
-  Lista* lista;
-  lista = criaPrimeiroElemento(8);
-  lista = insereValorListaOrdenada(lista,5);
-  lista = insereValorListaOrdenada(lista,2);
-  lista = insereValorListaOrdenada(lista,1);
-  lista = insereValorListaOrdenada(lista,4);
-  lista = insereValorListaOrdenada(lista,20);
-  lista = insereValorListaOrdenada(lista,12);
-  imprimirLista(lista);
-  liberaLista(lista);
-  return 0;
+  Lista* lista = cria_lista();
+  adiciona_elemento(lista,20);
+  adiciona_elemento(lista,18);
+  adiciona_elemento(lista,16);
+  adiciona_elemento(lista,22);
+  adiciona_elemento(lista,5);
+  adiciona_elemento(lista,17);
+  adiciona_elemento(lista,15);
+  imprime_lista(lista);
+  libera_lista(lista);
 }
 
-
-// Implementando Funções.
-
-Lista* criaPrimeiroElemento(int valorRecebido) {
-  Lista* lista;
-  lista = (Lista*) malloc(sizeof(Lista)); // Alocando espaço na memória para o primeiro elemento.
-  lista->valor = valorRecebido; // O valor do primeiro elemento será o valor recebido como parâmetro na função.
-  lista->proximo = NULL; // O primeiro elemento irá apontar para NULL.
-  return lista; // A função retorna o ponteiro para o primeiro elemento.
+Lista* cria_lista(void) {
+  Lista* nova_lista = (Lista*)malloc(sizeof(Lista));
+  nova_lista->quantidade_elementos = 0;
+  nova_lista->inicio = NULL;
+  nova_lista->fim = NULL;
+  return nova_lista;
 }
 
-Lista* insereValorListaOrdenada(Lista* lista, int valorRecebido) {
-
-  Lista* anterior = NULL;
-  Lista* varredor = lista;
-
-  while(varredor !=NULL && varredor->valor < valorRecebido) {
-    anterior = varredor;
-    varredor = varredor->proximo;
-  }
-
-  Lista* novoElemento;
-  novoElemento = (Lista*) malloc(sizeof(Lista));
-  novoElemento->valor = valorRecebido;
-
-  if (anterior == NULL) {
-    novoElemento->proximo = lista;
-    lista = novoElemento;
-  } else  {
-    novoElemento->proximo = anterior->proximo;
-    anterior->proximo = novoElemento;
-  }
-
-
-  return lista;
+No* cria_no(int info) {
+  No* novo_no = (No*)malloc(sizeof(No));
+  novo_no->info = info;
+  novo_no->proximo = NULL;
+  return novo_no;
 }
 
-Lista* retiraElemento(Lista* lista, int valorRecebido) {
-  Lista* anterior = NULL; // Ponteiro para elemento anterior
-  Lista* varredor = lista; // Ponteiro para percorrer a lista
+void adiciona_elemento(Lista* lista, int info) {
+  No* novo_elemento = cria_no(info);
+  if(lista->quantidade_elementos == 0) {
+    lista->inicio = novo_elemento;
+    lista->fim = novo_elemento;
+    lista->quantidade_elementos++;
+  } else {
+    No* anterior = NULL;
+    No* varredor = lista->inicio;
+    while(varredor != NULL && varredor->info < info) {
+      anterior = varredor;
+      varredor = varredor->proximo;
+    }
 
-  printf("O elemento escolhido para ser removido foi o %d\n", valorRecebido);
+    No* novo_elemento = cria_no(info);
+    novo_elemento->info = info;
 
-  while(varredor != NULL && varredor->valor !=valorRecebido) {
-    anterior = varredor;
-    varredor = varredor->proximo;
-  }
-  // Se o elemento não foi encontrado, retorno a lista original.
-  if (varredor == NULL) {
-    return lista;
 
-  } else if (anterior == NULL) {
-    /*Se o anterior continuar como NULL,
-     significa que o elemento a ser excluído, era o primeiro elemento.*/
-     /*Sendo assim, o ponteiro da lista, passa a apontar para o próximo valor da lista*/
-    lista = varredor->proximo;
-  }
-  else {
-    /* O ponteiro próximo do elemento anterior, receberá o ponteiro próximo do varredor*/
-    anterior->proximo = varredor->proximo;
-  }
-  free(varredor);
-  return lista;
-}
-
-void liberaLista(Lista* lista) {
-  Lista* varredor = lista;
-  while (varredor != NULL) {
-    // Guarda referência p/ próximo elemento.
-    Lista* referenciaProximo = varredor->proximo;
-    free(varredor);
-    varredor = referenciaProximo;
+    if(anterior == NULL) {
+      novo_elemento->proximo = lista->inicio;
+      lista->inicio = novo_elemento;
+    } else {
+      novo_elemento->proximo = anterior->proximo;
+      anterior->proximo = novo_elemento;
+    }
   }
 }
 
-void imprimirLista (Lista* lista) {
-  Lista* varredor;
-  for (varredor = lista; varredor!= NULL; varredor = varredor->proximo) {
-    printf("Valor : %d\n", varredor->valor);
+void imprime_lista(Lista* lista) {
+  sleep(1);
+  printf("Imprimindo lista...\n");
+  sleep(1);
+  No* aux;
+  aux = lista->inicio;
+  while(aux != NULL) {
+    printf("%d\n",aux->info);
+    aux = aux->proximo;
+  }
+}
+
+void libera_lista(Lista* lista) {
+  No* aux;
+  aux = lista->inicio;
+  while(aux != NULL) {
+    No* proximo = aux->proximo;
+    free(aux);
+    aux = proximo;
   }
 }
