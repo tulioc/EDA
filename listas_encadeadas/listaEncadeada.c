@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 typedef struct lista Lista;
 typedef struct no No;
@@ -34,11 +35,14 @@ int main (void) {
 }
 
 Lista* cria_lista(void) {
+  printf("Criando Lista Vazia\n");
+  sleep(1);
   Lista* nova_lista = (Lista*)malloc(sizeof(Lista));
   nova_lista->quantidade_elementos = 0;
   nova_lista->inicio = NULL;
   nova_lista->fim = NULL;
   return nova_lista;
+  printf("Lista criada com sucesso\n");
 }
 
 No* cria_no(int info) {
@@ -58,6 +62,8 @@ No* busca_elemento(Lista* lista, int info) {
 }
 
 void adiciona_elemento_fim(Lista* lista, int info) {
+  sleep(1);
+  printf("Adicionando elemento %i ao final da lista\n", info);
   No* novo_elemento = cria_no(info);
   if(lista->quantidade_elementos == 0) {
     lista->inicio = novo_elemento;
@@ -68,9 +74,13 @@ void adiciona_elemento_fim(Lista* lista, int info) {
     lista->fim = novo_elemento;
     lista->quantidade_elementos++;
   }
+  sleep(1);
+  printf("Elemento adicionado com sucesso!\n");
 }
 
 void deleta_elemento_fim(Lista* lista, int info) {
+  sleep(1);
+  printf("Removendo elemento %i da lista\n", info);
   if(lista->quantidade_elementos > 0) {
     No* aux = lista->inicio;
     while(aux->proximo != lista->fim) {
@@ -79,12 +89,17 @@ void deleta_elemento_fim(Lista* lista, int info) {
     aux->proximo = NULL;
     free(lista->fim);
     lista->fim = aux;
+    sleep(1);
+    printf("Elemento removido com sucesso!\n");
   } else {
     printf("Lista sem elemento\n");
   }
 }
 
 void imprime_lista(Lista* lista) {
+  sleep(1);
+  printf("Imprimindo lista...\n");
+  sleep(1);
   No* aux;
   aux = lista->inicio;
   while(aux != NULL) {
